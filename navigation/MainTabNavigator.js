@@ -6,6 +6,7 @@ import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import LinksScreen from '../screens/LinksScreen';
 import SettingsScreen from '../screens/SettingsScreen';
+import CreateWalletScreen from '../screens/CreateWalletScreen';
 
 const HomeStack = createStackNavigator(
   {
@@ -23,7 +24,8 @@ const HomeStack = createStackNavigator(
         fontWeight: 'bold',
       },
     },
-  });
+  }
+);
 
 HomeStack.navigationOptions = {
   tabBarLabel: 'Home',
@@ -67,8 +69,25 @@ SettingsStack.navigationOptions = {
   ),
 };
 
-export default createBottomTabNavigator({
-  HomeStack,
-  LinksStack,
-  SettingsStack,
+const WalletStack = createStackNavigator({
+  Wallets: CreateWalletScreen
 });
+
+WalletStack.navigationOptions = {
+  tabBarLabel: 'Wallet',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon
+      focused={focused}
+      name={Platform.OS === 'ios' ? `ios-options${focused ? '' : '-outline'}` : 'md-options'}
+    />
+  ),
+};
+
+export default createBottomTabNavigator(
+  {
+    HomeStack,
+    WalletStack,
+    LinksStack,
+    SettingsStack,
+  },
+);
