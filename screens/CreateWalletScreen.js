@@ -1,9 +1,12 @@
 import React from 'react';
 import {ScrollView, StyleSheet, Image, View, Text, Alert} from 'react-native';
 import {Form, Item, Input, Icon, Picker, CheckBox, ListItem, Button} from 'native-base';
-import { Font } from "expo";
+import { connect } from 'react-redux'
+import { setWalletCurrency, setWalletName } from "../actions";
+import { store } from "../App";
 
-export default class LinksScreen extends React.Component {
+
+class CreateWalletScreen extends React.Component {
   static navigationOptions = {
     title: 'Create Wallet',
   };
@@ -11,7 +14,8 @@ export default class LinksScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedCurrency: undefined,
+      walletName: null,
+      selectedCurrency: 'bch',
       createBackup: false,
     };
   }
@@ -22,8 +26,10 @@ export default class LinksScreen extends React.Component {
     });
   }
 
-  onCreateWallet() {
-    Alert.alert("You're creating a wallet!");
+  onWalletChange(value) {
+    this.setState({
+      walletName: value
+    });
   }
 
   render() {
@@ -35,7 +41,7 @@ export default class LinksScreen extends React.Component {
         <View style={styles.contentContainer}>
           <Form>
             <Item>
-              <Input placeholder="Name"/>
+              <Input placeholder="Name" onChangeText={(text) => this.setState({walletName: text})}/>
             </Item>
             <Item>
               <Picker
@@ -45,10 +51,10 @@ export default class LinksScreen extends React.Component {
                 placeholderStyle={{ color: "#bfc6ea" }}
                 placeholderIconColor="#007aff"
                 selectedValue={this.state.selectedCurrency}
-                onValueChange={this.onCurrencyChange.bind(this)}
+                onValueChange={(value, index) => this.setState({selectedCurrency: value})}
               >
-                <Picker.Item label="BCH" value="key0" />
-                <Picker.Item label="BTC" value="key1" />
+                <Picker.Item label="BCH" value="bch" />
+                <Picker.Item label="BTC" value="btc" />
               </Picker>
             </Item>
             {/*TODO - change to normal Item*/}
@@ -57,7 +63,7 @@ export default class LinksScreen extends React.Component {
                 onPress={() => { this.setState({createBackup: !this.state.createBackup}) } }/>
               <Text>Create Backup</Text>
             </ListItem>
-            <Button full onPress={this.onCreateWallet}>
+            <Button full onPress={() => {this.props.onCreateWalletClick(this.state.walletName, this.state.selectedCurrency)}}>
               <Text>Create Wallet</Text>
             </Button>
           </Form>
@@ -86,3 +92,24 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   }
 });
+
+const mapStateToProps = state => {
+  return {}
+};
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+  return {
+    onCreateWalletClick: (walletName, walletCurrency) => {
+      Alert.alert("You're creating a wallet: " + walletName + " " + walletCurrency);
+      dispatch(setWalletCurrency(walletCurrency))
+      dispatch(setWalletName(walletName))
+    }
+  }
+};
+
+const CreateWalletScreenContainer = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(CreateWalletScreen);
+
+export default CreateWalletScreenContainer;
