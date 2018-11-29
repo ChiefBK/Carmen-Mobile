@@ -9,11 +9,10 @@ function* helloSaga() {
 export const CREATE_WALLET = 'CREATE_WALLET';
 
 function* createWallet() {
-  const {walletName, walletCurrency} = yield take(CREATE_WALLET);
-  console.log("create wallet saga");
+  const { walletName, walletCurrency } = yield take(CREATE_WALLET);
 
-  put(setWalletName(walletName))
-  put(setWalletCurrency(walletCurrency))
+  yield put(setWalletName(walletName))
+  yield put(setWalletCurrency(walletCurrency))
 
   const state = yield select()
 
