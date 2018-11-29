@@ -1,7 +1,7 @@
 const redux = require('redux');
 const { combineReducers } = redux;
 const actions = require('./actions');
-const { SET_WALLET_NAME, SET_WALLET_CURRENCY} = actions;
+const { SET_WALLET_NAME, SET_WALLET_CURRENCY } = actions;
 
 /*
 

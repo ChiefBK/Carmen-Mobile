@@ -4,6 +4,7 @@ import {Form, Item, Input, Icon, Picker, CheckBox, ListItem, Button} from 'nativ
 import { connect } from 'react-redux'
 import { setWalletCurrency, setWalletName } from "../actions";
 import { store } from "../App";
+import { CREATE_WALLET } from "../sagas";
 
 
 class CreateWalletScreen extends React.Component {
@@ -100,9 +101,11 @@ const mapStateToProps = state => {
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     onCreateWalletClick: (walletName, walletCurrency) => {
-      Alert.alert("You're creating a wallet: " + walletName + " " + walletCurrency);
-      dispatch(setWalletCurrency(walletCurrency))
-      dispatch(setWalletName(walletName))
+      dispatch({
+        type: CREATE_WALLET,
+        walletName,
+        walletCurrency,
+      });
     }
   }
 };
